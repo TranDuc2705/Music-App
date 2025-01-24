@@ -1,0 +1,45 @@
+@startuml
+package "View" {
+  
+  class SDL_Config {
+    - window: SDL_Window*
+    - renderer: SDL_Renderer*
+    - font: TTF_Font*
+    + SDL_Config()
+    + ~SDL_Config()
+    + SDL_Init(title: const std::string&, width: int, height: int): void
+    + SDL_Clean(): void
+    + getRenderer(): SDL_Renderer*
+    + getWindow(): SDL_Window*
+    + getFont(): TTF_Font*
+  }
+
+  class Button {
+    - sdlConfig: SDL_Config&
+    - buttonRect: SDL_Rect
+    - buttonLabel: std::string
+    - buttonColor: SDL_Color
+    - pressed: bool
+    - onClickCallback: std::function<void()>
+    + Button(label: const std::string&, x: int, y: int, w: int, h: int)
+    + render(): void
+    + handleEvent(event: SDL_Event*): bool
+    + isPressed(): bool
+    + getButtonLabel(): const std::string&
+    + setOnClickAction(action: std::function<void()>): void
+  }
+
+  class ViewManager {
+    - baseScreenPtr: BaseScreen*
+    + render(): void
+    + setCurrentScreen(screen: BaseScreen*): void
+    + handleEvent(event: SDL_Event*): bool
+    + getButtons(): std::vector<Button&>
+  }
+
+  abstract class BaseScreen {
+    + handleEvent(event: SDL_Event*): bool
+    + render(): void
+  }
+}
+@enduml
